@@ -32,7 +32,7 @@ prefix = "Scaled_GTEX_Final_Batch_"
 
 print("begin age data shaping")
 age_df = pd.read_csv(split_data_pathway+"Age_data.csv")
-age_df['age_index_col'] = age_df.index
+#age_df['age_index_col'] = age_df.index
 print("number of rows: "+str(len(age_df.index)))
 print("final number of columns: "+str(len(age_df.columns)))
 
@@ -49,49 +49,55 @@ list_construction_start_time = time.time()
 for i in range(12):
     file_name = split_data_pathway+prefix+str(i)+".csv"
     additional_df = pd.read_csv(file_name)
-    if i==0:
-        print(additional_df.iloc[0:5,0:5])
-        print("check here")
-        print(additional_df.iloc[0, 0])
-        print(additional_df['0'])
-    # if i=11:
-    #     additional_df.set_index('')
-    #df = pd.concat([self,additional_df], axis=1)
-    append_start_time = time.time()
+    #reordered_age_by_id_df = pd.DataFrame
+
+    # if i==0:
+
+    #     print(additional_df.iloc[0:5,0:5])
+    #     print("check here")
+    #     additional_df.rename(columns={'Unnamed: 0': 'SAMPID'}, inplace=True)
+    #     temp_df = pd.DataFrame(additional_df['SAMPID'])
+    #     # reordered_age_by_id_df = temp_df.set_index('SAMPID').join(age_df.set_index('SAMPID'))
+    #     # reordered_age_by_id_df.reset_index(drop=True)
+    #     # print("updated reordered")
+    #     # print(reordered_age_by_id_df.head)
+    #     # print("number of rows in new age column match?")
+    #     # print("columns in reordered?")
+    #     # print(reordered_age_by_id_df.columns)
+    #     # print(len(reordered_age_by_id_df)==len(additional_df))
+    #     print("breakbreak")
+
     list_of_dfs.append(additional_df)
-    append_end_time = time.time()
     print("appended df"+str(i))
-    print("df length: "+str(len(additional_df.index)))
-    print(additional_df.iloc[0:6,0:4])
-    print(append_end_time-append_start_time)
-    # print("number of columns")
-    # print(len(df.columns))
+    #print("df length: "+str(len(additional_df.columns)))
 
 list_construction_end_time = time.time()
 print("total time to construct list of dataframes:")
 print(list_construction_end_time-list_construction_start_time)
 list_concat_start_time = time.time()
+
 df = pd.concat(list_of_dfs)
+df_with_age = pd.merge(df,age_df,how=left,on='SAMPID')
+print("df_with_age:")
+print(df_with_age.iloc[0:5,-1:-5])
+
 list_concat_end_time = time.time()
 print("total time to concatenate list of dataframes:")
 print(list_construction_end_time-list_construction_start_time)
 print("final number of rows: "+str(len(df.index)))
 print("final number of columns: "+str(len(df.columns)))
 
-# #append age column as last column
 
+# create new database
+engine = create_engine('sqlite:///ageGap.db', echo=True)
+sqlite_connection = engine.connect()
 
+# insert main table
 
-# # create new database
-# engine = create_engine('sqlite:///dataset.db', echo=True)
-# sqlite_connection = engine.connect()
-#
-# # insert main table
-#
-# sqlite_table = "all_samples_x_all_genes"
-# df.to_sql(sqlite_table, sqlite_connection, if_exists='replace')
-#
+sqlite_table = "all_samples_x_all_genes_with_age"
+df.to_sql(sqlite_table, sqlite_connection, if_exists='replace')
 
+sqlite_connection.close()
 # connection = sqlite3.connect('dataset.db')
 # cursor = connection.cursor()
 
