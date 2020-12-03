@@ -7,3 +7,4 @@ def load_indices(path_to_file):
 def get_data(database, table, index):
     # returns (gene_expr_data, age) correpsonding to the specified index in the specified table of the specified database
     pass
+
