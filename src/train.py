@@ -1,10 +1,21 @@
 import datasets
 from models import ElasticNetModel, NNModel
+import yaml
+import sys
+
+def get_args(config):
+    with open(config, 'rb') as f:
+        args = yaml.load(f.read())
+    return args
 
 def train(args):
-    test, train, val = datasets.get_partitions(args)
-    model_type = ElasticNetModel if args.model_type == 'elastic' else NNModel
-    model = model_type(args)
+
+    # general model
+    full_dataset = args['dataset']
+    full_data_indices = load_indices(args['data_indices'])
+
+    test, train, val = datasets.get_partitions(full_data_indices, full_dataset, args['num_test'], args['num_val'])
+    model = NNModel(args)
 
     # insert other definitions here, e.g. callbacks
 
@@ -12,3 +23,8 @@ def train(args):
     model.fit(data=train, val_data=val) # other parameters as well
 
     model.evaluate(data=test)
+
+if __name__=='__main__':
+    config_file = sys.argv[1]
+    args = get_args(config_file)
+    train(args)

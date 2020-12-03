@@ -1,0 +1,9 @@
+batch_size: 64
+buffer_size: 100
+dataset: "path_here.db"
+data_indices: "path_here.db"
+epochs: 8
+num_genes: 20000
+num_test: 5000
+num_val: 1000
+output_model_path: "full_model.h5"
