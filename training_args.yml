@@ -1,7 +1,8 @@
 batch_size: 64
 buffer_size: 100
-dataset: "path_here.db"
-data_indices: "path_here.db"
+database: "path_here"
+data_indices: "path_here"
+data_table: "all"
 epochs: 8
 num_genes: 20000
 num_test: 5000
