@@ -1,4 +1,5 @@
 import datasets
+import database
 from models import ElasticNetModel, NNModel
 import yaml
 import sys
@@ -12,7 +13,7 @@ def train(args):
 
     # general model
     full_dataset = args['dataset']
-    full_data_indices = load_indices(args['data_indices'])
+    full_data_indices = database.load_indices(args['data_indices'])
 
     test, train, val = datasets.get_partitions(full_data_indices, full_dataset, args['num_test'], args['num_val'])
     model = NNModel(args)
