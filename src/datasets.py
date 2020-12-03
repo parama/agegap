@@ -3,12 +3,19 @@ import preprocessing
 import database
 import numpy as np
 import math
+import sklearn
 
-def get_partitions(args, num_test, num_val):
+def get_partitions(args):
     '''
     Partitions data_indices of database into test, train, and validation data.
     Returns (test, train, val), a tuple of CustomDataset objects.
     '''
+    # X_train, X_test, y_train, _ = sklearn.model_selection.train_test_split(X, y, test_size=args['test_size'], random_state=42, stratify=y)
+    # X_train, X_val, _, _ = sklearn.model_selection.train_test_split(X_train, y_train, test_size=args['val_size'], random_state=42, stratify=y_train)
+
+    # masterdf = a dataframe with rows as samples and columns as genes
+    # test = series with rows as samples and column as age
+
     data_indices = database.load_indices(args['data_table'])
     num_test, num_val = args['num_test'], args['num_val']
 

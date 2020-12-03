@@ -4,7 +4,7 @@ database: path_here
 data_table: all
 epochs: 8
 num_genes: 20000
-num_test: 5000
-num_val: 1000
+test_size: 0.3
+val_size: 0.05
 output_model_path: full_model.h5
 pretrained_model_path: ~
