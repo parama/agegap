@@ -9,7 +9,7 @@ def get_partitions(args, num_test, num_val):
     Partitions data_indices of database into test, train, and validation data.
     Returns (test, train, val), a tuple of CustomDataset objects.
     '''
-    data_indices = database.load_indices(args['data_indices'])
+    data_indices = database.load_indices(args['data_table'])
     num_test, num_val = args['num_test'], args['num_val']
 
     shuffled_indices = np.random.shuffle(data_indices)

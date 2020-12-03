@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 class NNModel:
     def __init__(self, args):
         self.args = args
-        self.model = self.basic()
+        self.model = self.basic() if not args['pretrained_model_path'] else keras.models.load_model(args['pretrained_model_path'])
 
     def basic(self):
         print("Build model")
@@ -58,3 +58,9 @@ class NNModel:
         results = model.evaluate(x=data.dataset)
         print(model.metrics_names)
         print(results)
+
+    def predict_one_with_saliency(self, data_input):
+        with tf.GradientTape() as tape:
+            pred = self.model(data_input)
+        grads = tape.gradients(pred, data_input)
+        # insert more analysis here
